@@ -1,6 +1,55 @@
 
 import { useState } from "react";
-import { BookOpen } from "lucide-react";
+import type { IconType } from "react-icons";
+
+import {
+  SiHtml5,
+  SiCss,
+  SiJavascript,
+  SiTypescript,
+  SiReact,
+  SiNodedotjs,
+  SiExpress,
+  SiPostgresql,
+  SiPhp,
+  SiGit,
+  SiGithub,
+  SiDocker,
+  SiNpm,
+  SiPython,
+} from "react-icons/si";
+
+import { FaJava, FaDatabase, FaCode } from "react-icons/fa";
+import { VscCode } from "react-icons/vsc";
+
+
+type SkillIcon = {
+  icon: IconType;
+  color: string;
+};
+
+const skillIcons: Record<string, SkillIcon> = {
+  HTML5: { icon: SiHtml5, color: "#E34F26" },
+  CSS3: { icon: SiCss, color: "#1572B6" },
+  JavaScript: { icon: SiJavascript, color: "#F7DF1E" },
+  TypeScript: { icon: SiTypescript, color: "#3178C6" },
+  React: { icon: SiReact, color: "#61DAFB" },
+
+  "Node.js": { icon: SiNodedotjs, color: "#5FA04E" },
+  "Express.js": { icon: SiExpress, color: "#E5E7EB" },
+  "REST APIs": { icon: FaCode, color: "#9CC9F5" },
+  PostgreSQL: { icon: SiPostgresql, color: "#699ECA" },
+  SQL: { icon: FaDatabase, color: "#D3AF79" },
+
+  Java: { icon: FaJava, color: "#E76F51" },
+  PHP: { icon: SiPhp, color: "#8892BF" },
+
+  Git: { icon: SiGit, color: "#F05032" },
+  GitHub: { icon: SiGithub, color: "#F5F5F5" },
+  Docker: { icon: SiDocker, color: "#2496ED" },
+  npm: { icon: SiNpm, color: "#CB3837" },
+  "VS Code": { icon: VscCode, color: "#29A7E8" },
+};
 
 type SkillsTab =
   | "frontend"
@@ -110,23 +159,33 @@ export function Skills() {
 
         <p>{activeSection.description}</p>
 
-        <div className="skills-grid">
-          {activeSection.technologies.map(
-            (technology) => (
-              <div
-                key={technology}
-                className="skill-item"
-              >
-                <span className="skill-dot" />
-                <span>{technology}</span>
-              </div>
-            )
-          )}
-        </div>
+        
+<div className="skills-grid">
+  {activeSection.technologies.map((technology) => {
+    const skill = skillIcons[technology];
+    const Icon = skill?.icon ?? FaCode;
+
+    return (
+      <div key={technology} className="skill-item">
+        <Icon
+          className="skill-logo"
+          style={{ color: skill?.color ?? "#D3AF79" }}
+          aria-hidden="true"
+        />
+
+        <span>{technology}</span>
+      </div>
+    );
+  })}
+</div>
+
       </section>
 
       <div className="skills-learning">
-        <BookOpen aria-hidden="true" />
+        <SiPython
+  aria-hidden="true"
+  style={{ color: "#8AC6F0" }}
+/>
 
         <div>
           <strong>Currently learning Python</strong>

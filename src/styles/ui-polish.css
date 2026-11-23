@@ -649,14 +649,32 @@
   font-weight: 600;
 }
 
-.skill-dot {
-  width: 7px;
-  height: 7px;
-  flex-shrink: 0;
 
-  background: #d4af78;
-  border-radius: 50%;
+/* Logotipos de Skills */
+
+.skill-logo {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
 }
+
+.skill-item {
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.skill-item:hover {
+  background: #293d57;
+  border-color: rgba(211, 175, 121, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-item {
+    transition: none;
+  }
+}
+
 
 /* Actualmente aprendiendo */
 
@@ -1530,80 +1548,197 @@
   .selected-info { padding: 4px 8px 4px 18px; }
 }
 
-/* Moviles y tablets en vertical: mano desplazable y panel con scroll. */
+/* Aviso de desplazamiento: solo aparece en pantallas pequeñas. */
+.mobile-swipe-hint { display: none; }
+
+/* ===== MOBILE: ESCENA COMPLETA + UI SEPARADA ===== */
+/* Solo afecta a pantallas estrechas; escritorio permanece igual. */
 @media (max-width: 750px) {
-  .game-table { padding: 14px 12px 12px; }
-  .game-header {
+  .game-table {
     position: relative;
-    align-self: center;
-    margin-left: 0;
-    width: min(100%, 360px);
-  }
-  .game-content {
-    position: relative;
-    width: 100%;
-    min-height: 130px;
-    overflow: visible;
-  }
-  .welcome-message {
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 12px 16px;
-  }
-  .card-hand {
-    position: relative;
-    width: 100%;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    gap: 10px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 14px 8px 20px;
-    z-index: 1;
-  }
-  .card-slot {
-    width: 110px;
-    height: 165px;
-    aspect-ratio: 2 / 3;
-    flex-shrink: 0;
-  }
-  .card-slot:nth-child(n) { transform: none; }
-  .selected-stage {
-    position: fixed;
-    inset: 0;
-    height: 100dvh;
-    padding: 12px;
-    pointer-events: none;
-    z-index: 30;
-  }
-  .selected-window {
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+    min-height: max(100dvh, 630px);
+    padding: 12px 12px max(12px, env(safe-area-inset-bottom));
+    overflow-x: hidden;
+    overflow-y: visible;
+    background: linear-gradient(180deg, #101825 0%, #111a29 60%, #0a1425 100%);
+  }
+
+  /* Una UNICA ilustracion nitida: muestra el arte completo en horizontal.
+     No se vuelve a dibujar ampliada en medio de la pagina. */
+  .game-table::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    height: min(66.6667vw, 340px);
+    z-index: 0;
+    background: url("/images/tavern-background.png") center top / 100% auto no-repeat;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 86%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 86%, transparent 100%);
+    pointer-events: none;
+  }
+  .game-table::after { content: none; }
+
+  /* El nombre BAJO la ilustracion, en vez de taparla. */
+  .game-header {
+    position: relative;
+    top: auto;
+    left: auto;
+    z-index: 1;
+    align-self: center;
+    flex: 0 0 auto;
+    width: min(100%, 330px);
+    max-width: 330px;
+    margin: calc(min(66.6667vw, 340px) + 4px) auto 0;
+    padding: 12px 16px;
+    text-align: center;
+    backdrop-filter: none;
+  }
+  .game-header h1 {
+    margin: 0 0 6px;
+    font-size: clamp(1.2rem, 5vw, 1.45rem);
+  }
+  .game-header p { font-size: 0.65rem; letter-spacing: 0.09em; }
+
+  /* Mensaje de inicio COMPACTO. */
+  .game-content {
+    position: relative;
+    inset: auto;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    min-height: 80px;
+    width: 100%;
+    overflow: visible;
+  }
+  .welcome-message {
+    position: relative;
+    display: block;
+    width: fit-content;
+    max-width: min(290px, calc(100vw - 54px));
+    min-width: 0;
+    margin: 12px auto;
+    padding: 11px 16px;
+    border-width: 1px;
+    border-radius: 10px;
+    background: rgba(10, 21, 37, 0.94);
+    box-shadow: 0 8px 24px rgba(0,0,0,.22);
+  }
+  .welcome-message h2 {
+    margin: 0 0 5px;
+    font-size: 1.1rem;
+  }
+  .welcome-message p { margin: 0; font-size: .72rem; line-height: 1.45; }
+
+  /* Pista y cinco cartas accesibles mediante desplazamiento horizontal. */
+  .mobile-swipe-hint {
+    position: relative;
+    z-index: 2;
+    display: block;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 4px 0 6px;
+    color: #c9d8e8;
+    font: 600 .7rem "Inter", sans-serif;
+    text-align: center;
+  }
+  .card-hand {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    transform: none;
+    z-index: 3;
+    display: flex;
+    flex: 0 0 auto;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: flex-start;
     gap: 12px;
-    width: min(480px, 100%);
-    height: min(720px, calc(100dvh - 24px));
-    max-height: calc(100dvh - 24px);
-    padding: 16px;
+    width: 100%;
+    margin: 0;
+    padding: 6px 4px 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #947450 transparent;
+  }
+  .card-slot {
+    flex: 0 0 103px;
+    width: 103px;
+    height: 154.5px;
+    aspect-ratio: 2 / 3;
+    scroll-snap-align: start;
+  }
+  .card-slot:nth-child(n) { transform: none; }
+  .game-card { width: 100%; height: 100%; }
+
+  /* Carta abierta: panel scrollable y la mano desaparece por debajo. */
+  .selected-stage {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    width: 100%;
+    height: 100dvh;
+    padding: 10px;
+    pointer-events: none;
+  }
+  .selected-window {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    flex: 0 1 auto;
+    width: min(100%, 480px);
+    height: min(760px, calc(100dvh - 20px));
+    max-height: calc(100dvh - 20px);
+    min-height: 0;
+    padding: 14px;
     overflow-x: hidden;
     overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .selected-card {
-    width: 115px;
-    height: 172.5px;
+    width: 104px;
+    height: 156px;
     flex: 0 0 auto;
+    align-self: center;
   }
   .selected-info {
     width: 100%;
+    min-width: 0;
     height: auto;
-    min-height: 0;
     max-height: none;
+    flex: 0 0 auto;
     padding: 0;
-    border-left: none;
+    border: none;
     overflow: visible;
   }
+  .panel-topbar { margin-bottom: 16px; }
   .about-halo__photo { width: 60px; height: 60px; }
+  .game-table--open .game-content { z-index: 40; }
+  .game-table--open .card-hand,
+  .game-table--open .mobile-swipe-hint { display: none; }
+}
+
+@media (max-width: 750px) and (max-height: 550px) {
+  .selected-window { height: calc(100dvh - 12px); max-height: calc(100dvh - 12px); }
+  .selected-card { width: 80px; height: 120px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

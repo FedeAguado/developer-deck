@@ -37,7 +37,12 @@ const selectedCard =
   }, []);
 
   return (
-  <main className="game-table">
+  
+<main
+  className={`game-table ${
+    selectedCard ? "game-table--open" : ""
+  }`}
+>
     <header className="game-header">
       <h1>Federico Aguado</h1>
       <p>Junior Software Developer</p>
@@ -148,6 +153,10 @@ const selectedCard =
         )}
       </AnimatePresence>
     </section>
+
+    <p className="mobile-swipe-hint">
+    Swipe to see all five cards →
+    </p>
 
     <nav className="card-hand" aria-label="Portfolio sections">
       {cards.map((card) => (

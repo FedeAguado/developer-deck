@@ -102,7 +102,7 @@ export function AboutMe() {
 
             <div className="about-halo">
             <img
-    src="/images/kaiser.jpg"
+    src="/images/kaiser.png"
     alt="Kaiser, my dog"
     className="about-halo__photo"
             />
