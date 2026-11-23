@@ -1,0 +1,56 @@
+/* Developer Deck: only the stars in the night sky are animated. */
+.scene-ambience {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.scene-ambience__art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.scene-star__twinkle {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dd-twinkle 7s linear infinite;
+  filter: drop-shadow(0 0 4px #6ec8ff);
+}
+
+@keyframes dd-twinkle {
+  0%, 66%, 100% { opacity: 0; transform: scale(.4); }
+  73% { opacity: .35; transform: scale(.75); }
+  76% { opacity: 1; transform: scale(1.3); }
+  82% { opacity: .2; transform: scale(.65); }
+  86% { opacity: 0; transform: scale(.3); }
+}
+
+/* On mobile, align stars with the full-width panoramic illustration. */
+@media (max-width: 750px) {
+  .scene-ambience {
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1672 / 941;
+  }
+
+  .scene-ambience__art {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-star__twinkle {
+    animation: none;
+    opacity: 0;
+  }
+}

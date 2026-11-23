@@ -11,9 +11,11 @@ import { Skills } from "./components/Skills";
 import { Experience } from "./components/Experience";
 import { Projects } from "./components/Projects";
 import { Contact } from "./components/Contact";
+import { SceneAmbience } from "./components/SceneAmbience";
 
 import "./styles/game.css";
 import "./styles/ui-polish.css";
+import "./styles/scene-ambience.css";
 
 function App() {
   const [selectedCardId, setSelectedCardId] =
@@ -43,6 +45,7 @@ const selectedCard =
     selectedCard ? "game-table--open" : ""
   }`}
 >
+  <SceneAmbience />
     <header className="game-header">
       <h1>Federico Aguado</h1>
       <p>Junior Software Developer</p>
